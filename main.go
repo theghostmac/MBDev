@@ -18,16 +18,14 @@ func renderTemplate() {
 }
 
 func main() {
-	router := mux.NewRouter()
-	fileServer := http.FileServer(http.Dir("assets/"))
+	router := mux.NewRouter().StrictSlash(false)
+	fileServer := http.FileServer(http.Dir("assets"))
 	router.Handle("/", fileServer)
-	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fileServer))
 	srv := &http.Server{
 		Handler:      router,
 		Addr:         "127.0.0.1:8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-
 	log.Fatal(srv.ListenAndServe())
 }
